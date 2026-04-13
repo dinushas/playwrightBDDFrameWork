@@ -35,7 +35,7 @@ async checkPlatformLink(linkName) {
 }
 
 async clickLogo() {
-    await this.logo.click();
+    await this.page.getByRole('link', { name: 'Home Page' }).click();
 }
 
 async clickBookDemo() {
@@ -59,6 +59,14 @@ async clickLoginLink(linkName) {
 async verifyPlatformDropdownVisible() {
   await expect(this.page.locator('.nav_dd1').first())
     .toBeVisible({ timeout: 5000 });
+}
+
+async checkCTAButtonIsVisible(buttonName){
+  await this.page.getByRole('link', { name: buttonName }).toBeVisible
+}
+
+async clickCTAButton(buttonName){
+  await this.page.getByRole('link', { name: buttonName }).click()
 }
 
 

@@ -38,7 +38,7 @@ jobs:
 
       # STEP 1: Run Cucumber tests per browser
       - name: Run Header Feature Tests (${{ matrix.browser }})
-        run: BROWSER=${{ matrix.browser }} npx cucumber-js tests/features/header-navigation.feature --require tests/steps --format json:reports/cucumber-report-${{ matrix.browser }}.json
+        run: BROWSER=${{ matrix.browser }} npx cucumber-js tests/features --require tests/steps --format json:reports/cucumber-report-${{ matrix.browser }}.json
 
       # STEP 2: Generate HTML Report
       - name: Generate HTML Report
