@@ -1,0 +1,24 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Reports
+reports/
+
+# Playwright
+playwright-report/
+test-results/
+
+# OS files
+.DS_Store

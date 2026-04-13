@@ -1,0 +1,48 @@
+
+name: Cucumber Playwright Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 19 * * *'  # 8 PM UK time (7 PM UTC)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create .env file
+        run: |
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      # STEP 1: Run Cucumber with JSON output
+      - name: Run Header Feature Tests
+        run: npx cucumber-js tests/features/header.feature --require tests/steps --format json:reports/cucumber-report.json
+
+      # STEP 2: Generate HTML report
+      - name: Generate HTML Report
+        run: node reports/generate-report.js
+
+      #  STEP 3: Upload report as artifact
+      - name: Upload Cucumber HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-html-report
+          path: reports/html
