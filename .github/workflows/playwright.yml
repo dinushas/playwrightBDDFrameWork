@@ -13,6 +13,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,23 +30,22 @@ jobs:
         run: npm install
 
       - name: Create .env file
-        run: |
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+        run: echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # STEP 1: Run Cucumber with JSON output
-      - name: Run Header Feature Tests
-        run: npx cucumber-js tests/features/header.feature --require tests/steps --format json:reports/cucumber-report.json
+      # STEP 1: Run Cucumber tests per browser
+      - name: Run Header Feature Tests (${{ matrix.browser }})
+        run: BROWSER=${{ matrix.browser }} npx cucumber-js tests/features/header.feature --require tests/steps --format json:reports/cucumber-report-${{ matrix.browser }}.json
 
-      # STEP 2: Generate HTML report
+      # STEP 2: Generate HTML Report
       - name: Generate HTML Report
         run: node reports/generate-report.js
 
-      #  STEP 3: Upload report as artifact
-      - name: Upload Cucumber HTML Report
+      # STEP 3: Upload report per browser
+      - name: Upload Cucumber HTML Report (${{ matrix.browser }})
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-html-report
+          name: cucumber-html-report-${{ matrix.browser }}
           path: reports/html
