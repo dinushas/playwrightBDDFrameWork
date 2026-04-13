@@ -1,5 +1,6 @@
 
-const { Before, After, Given, Then, setDefaultTimeout } = require('@cucumber/cucumber');
+const { Before, After, Given, When, Then, setDefaultTimeout } = require('@cucumber/cucumber');
+const { expect } = require('@playwright/test');
 const { getBrowser } = require('../utils/browserFactory');
 const { HomePage } = require('../pages/HomePage');
 require('dotenv').config();
@@ -19,7 +20,6 @@ Before(async function () {
 });
 
 Given('I open the homepage', async function () {
-  console.log('Opening:', process.env.BASE_URL);
 
   await this.page.goto(process.env.BASE_URL, {
     waitUntil: 'domcontentloaded',
@@ -29,9 +29,42 @@ Given('I open the homepage', async function () {
   console.log('Page opened');
 });
 
-Then('I should see the page title', async function () {
-  const title = await this.page.title();
-  console.log('Page title:', title);
+Then('the {string} link is visible', async function (linkName) {
+  await this.homePage.checkPlatformLink(linkName)
+  
+});
+
+
+
+Then('I should see the correct homepage URL', async function () {
+    const url = await this.homePage.getCurrentUrl();
+    await this.homePage.verifyUrl(process.env.BASE_URL)
+  
+});
+
+When('I click {string} link', async function (linkName) {
+      await this.homePage.clickNavLink(linkName);
+
+  
+});
+
+Then('URL should contain {string}', async function (partialUrl) {
+ await expect(this.page).toHaveURL(new RegExp(partialUrl));
+  
+});
+
+
+
+When('I click {string} button', async function (buttonName) {
+    await this.homePage.clickBookDemo(buttonName);
+
+
+});
+
+Then('I click {string} link and verify URL contains {string}', async function (linkName, urlPart) {
+    await this.homePage.clickLoginLink(linkName);
+
+    await expect(this.page).toHaveURL(new RegExp(urlPart));
 });
 
 After(async function () {
