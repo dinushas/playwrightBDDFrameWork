@@ -1,19 +1,22 @@
+
 const { chromium } = require('playwright');
 
 let browser;
 
 async function getBrowser() {
-  if (!browser) {
-    browser = await chromium.launch({ headless: true });
+  if (!browser || !browser.isConnected()) {
+    browser = await chromium.launch({
+      headless: false,
+    });
   }
   return browser;
 }
 
 async function closeBrowser() {
-  if (browser) {
+  if (browser && browser.isConnected()) {
     await browser.close();
-    browser = null;
   }
+  browser = null;
 }
 
 module.exports = {
