@@ -1,24 +1,20 @@
 
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-
 # Dependencies
 node_modules/
 
-# Environment variables
+# Env
 .env
 
-# Reports
-reports/
-
 # Playwright
-playwright-report/
 test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
 
-# OS files
+# Reports (generated in CI)
+reports/cucumber-report.json
+reports/html/
+
+# OS
 .DS_Store
