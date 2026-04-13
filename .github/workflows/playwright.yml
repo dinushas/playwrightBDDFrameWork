@@ -11,6 +11,7 @@ on:
 
 jobs:
   test:
+    name: "Cucumber E2E - ${{ matrix.browser }}"
     runs-on: ubuntu-latest
 
     strategy:
