@@ -9,7 +9,7 @@ let browser;
 //
 BeforeAll(async function () {
   browser = await chromium.launch({
-    headless: false, // set true for CI
+    headless: true, // set true for CI
   });
 });
 
